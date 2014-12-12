@@ -67,7 +67,7 @@ assign vsync = (vc < vpulse) ? 0:1;
 */
 always @ (*)
 begin   
-    if (vc >= vbp & vc < vfp)
+    if (vc >= vbp & vc < vfp && hc >= hbp && hc < hfp)
     begin
         char(0, 150, 150);
         char(1, 160, 150);
@@ -110,7 +110,7 @@ begin
     else
     begin
         red = 0;
-        green = 4'b1111;
+        green = 0;
         blue = 0;
     end
 end
