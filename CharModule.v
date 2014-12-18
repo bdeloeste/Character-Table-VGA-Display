@@ -26,6 +26,10 @@ reg [9:0] hc;
 reg [9:0] vc;
 reg [1:0] pxclk;
 
+wire inH = (hc < 640);
+wire inV = (vc < 480);
+wire inDisplay = inH && inV;
+
 always @ (posedge clk) pxclk = pxclk + 1;
 
 wire pclk;
@@ -67,56 +71,47 @@ assign vsync = (vc < vpulse) ? 0:1;
 */
 always @ (*)
 begin   
-    if (vc >= vbp & vc < vfp)
+    if (vc >= vbp & vc < vfp & hc >= hbp & hc < hfp)
 	begin
-		if (hc >= hbp & hc < hfp)
-		begin
-			char(0, 150, 150);
-			char(1, 160, 150);
-			char(2, 170, 150);
-			char(3, 180, 150);
-			char(4, 190, 150);
-			char(5, 200, 150);
-			char(6, 210, 150);
-			char(7, 220, 150);
-			char(8, 230, 150);
-			char(9, 240, 150);
-			char(10, 250, 150);
-			char(11, 150, 170);
-			char(12, 160, 170);
-			char(13, 170, 170);
-			char(14, 180, 170);
-			char(15, 190, 170);
-			char(16, 200, 170);
-			char(17, 210, 170);
-			char(18, 220, 170);
-			char(19, 230, 170);
-			char(20, 240, 170);
-			char(21, 250, 170);
-			char(22, 150, 190);
-			char(23, 160, 190);
-			char(24, 170, 190);
-			char(25, 180, 190);
-			
-			char(26, 150, 210);
-			char(27, 160, 210);
-			char(28, 170, 210);
-			char(29, 180, 210);
-			char(30, 190, 210);
-			char(31, 200, 210);
-			char(32, 210, 210);
-			char(33, 220, 210);
-			char(34, 230, 210);
-			char(35, 240, 210);
-		end
-		else
-		begin
-			red = 0;
-			green = 0;
-			blue = 0;
-		end
-    end
-    else
+		char(0, 150, 150);
+		char(1, 160, 150);
+		char(2, 170, 150);
+		char(3, 180, 150);
+		char(4, 190, 150);
+		char(5, 200, 150);
+		char(6, 210, 150);
+		char(7, 220, 150);
+		char(8, 230, 150);
+		char(9, 240, 150);
+		char(10, 250, 150);
+		char(11, 150, 170);
+		char(12, 160, 170);
+		char(13, 170, 170);
+		char(14, 180, 170);
+		char(15, 190, 170);
+		char(16, 200, 170);
+		char(17, 210, 170);
+		char(18, 220, 170);
+		char(19, 230, 170);
+		char(20, 240, 170);
+		char(21, 250, 170);
+		char(22, 150, 190);
+		char(23, 160, 190);
+		char(24, 170, 190);
+		char(25, 180, 190);
+		
+		char(26, 150, 210);
+		char(27, 160, 210);
+		char(28, 170, 210);
+		char(29, 180, 210);
+		char(30, 190, 210);
+		char(31, 200, 210);
+		char(32, 210, 210);
+		char(33, 220, 210);
+		char(34, 230, 210);
+		char(35, 240, 210);
+	end
+	if (!inDisplay)
     begin
         red = 0;
         green = 0;
@@ -140,6 +135,12 @@ begin
         red = color[3:0];
         green = color[7:4];
         blue = color[11:8];
+    end
+    if (!inDisplay)
+    begin
+        red = 0;
+        green = 0;
+        blue = 0;
     end
 end
 endfunction
